@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using GestionOrdinateurs.Client;
 using GestionOrdinateurs.Client.Services;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -31,5 +32,11 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<CustomAuthStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<CustomAuthStateProvider>());
+
+// TP6 : authentification OpenID Connect avec Keycloak
+builder.Services.AddOidcAuthentication(options =>
+{
+    builder.Configuration.Bind("Oidc", options.ProviderOptions);
+});
 
 await builder.Build().RunAsync();
