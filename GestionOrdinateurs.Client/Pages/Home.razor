@@ -1,0 +1,15 @@
+@page "/"
+
+<PageTitle>Accueil</PageTitle>
+
+<h1>Gestion des ordinateurs</h1>
+
+@* TP5 : message différent selon que l'utilisateur est connecté ou non *@
+<AuthorizeView>
+    <Authorized>
+        <p>Bienvenue <strong>@context.User.Identity?.Name</strong>, vous êtes connecté.</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>Vous n'êtes pas connecté. <a href="login">Se connecter</a></p>
+    </NotAuthorized>
+</AuthorizeView>

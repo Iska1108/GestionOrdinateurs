@@ -1,0 +1,160 @@
+@GestionOrdinateurs.API_HostAddress = http://localhost:5157
+
+# TP4 - Etat : 0=EnService 1=EnPanne 2=EnMaintenance 3=HorsService 4=Lent 5=Reparable
+# TP4 - TypeOrdi : 0=Portable 1=Fixe 2=Server
+
+### TP4 - Partie 1 : ajout de l'ordinateur Dell XPS 15
+POST {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs
+Content-Type: application/json
+
+{
+  "nom": "Dell XPS 15",
+  "etat": 0,
+  "stock": 3,
+  "prix": 1800,
+  "caracteristiques": {
+    "ramGo": 16,
+    "stockageGo": 1000,
+    "typeOrdi": 0,
+    "marque": "Dell",
+    "processeur": "Intel Core i7"
+  }
+}
+
+### TP4 - Partie 1 : ajout de l'ordinateur HP EliteDesk
+POST {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs
+Content-Type: application/json
+
+{
+  "nom": "HP EliteDesk",
+  "etat": 4,
+  "stock": 2,
+  "prix": 650,
+  "caracteristiques": {
+    "ramGo": 4,
+    "stockageGo": 256,
+    "typeOrdi": 1,
+    "marque": "HP",
+    "processeur": "Intel Core i3"
+  }
+}
+
+### TP4 - Partie 1 : ajout de l'ordinateur Lenovo ThinkPad
+POST {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs
+Content-Type: application/json
+
+{
+  "nom": "Lenovo ThinkPad",
+  "etat": 3,
+  "stock": 0,
+  "prix": 1200,
+  "caracteristiques": {
+    "ramGo": 16,
+    "stockageGo": 512,
+    "typeOrdi": 0,
+    "marque": "Lenovo",
+    "processeur": "Intel Core i5"
+  }
+}
+
+### TP4 - Partie 1 : ajout de l'ordinateur Asus ROG
+POST {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs
+Content-Type: application/json
+
+{
+  "nom": "Asus ROG",
+  "etat": 1,
+  "stock": 1,
+  "prix": 2200,
+  "caracteristiques": {
+    "ramGo": 32,
+    "stockageGo": 2000,
+    "typeOrdi": 1,
+    "marque": "Asus",
+    "processeur": "AMD Ryzen 9"
+  }
+}
+
+### TP4 - Partie 1 : ajout de l'ordinateur Dell PowerEdge
+POST {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs
+Content-Type: application/json
+
+{
+  "nom": "Dell PowerEdge",
+  "etat": 2,
+  "stock": 1,
+  "prix": 4500,
+  "caracteristiques": {
+    "ramGo": 64,
+    "stockageGo": 4000,
+    "typeOrdi": 2,
+    "marque": "Dell",
+    "processeur": "Intel Xeon"
+  }
+}
+
+### TP4 - Partie 1 : ajout de l'ordinateur Acer Aspire
+POST {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs
+Content-Type: application/json
+
+{
+  "nom": "Acer Aspire",
+  "etat": 4,
+  "stock": 4,
+  "prix": 450,
+  "caracteristiques": {
+    "ramGo": 8,
+    "stockageGo": 256,
+    "typeOrdi": 0,
+    "marque": "Acer",
+    "processeur": "AMD Ryzen 3"
+  }
+}
+
+### TP4 - Partie 1 : affichage de tous les ordinateurs
+GET {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs
+Accept: application/json
+
+### TP4 - Partie 2 : simulation de 3 réparations (lancer 2 fois pour avoir au moins 5 réparations)
+POST {{GestionOrdinateurs.API_HostAddress}}/api/reparations/simuler
+
+### TP4 - Partie 2 : historique des réparations (records)
+GET {{GestionOrdinateurs.API_HostAddress}}/api/reparations/historique
+Accept: application/json
+
+### TP4 - Partie 3 : diagnostic (HP EliteDesk : Lent et 4 Go -> Ajouter RAM)
+GET {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs/7/diagnostic
+Accept: application/json
+
+### TP4 - Partie 3 : diagnostic (Lenovo ThinkPad : HorsService -> Remplacement)
+GET {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs/8/diagnostic
+Accept: application/json
+
+### TP4 - Partie 3 : statistiques du parc (tuple nommé)
+GET {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs/statistiques
+Accept: application/json
+
+### TP4 - Partie 4 : recherche avec l'indexeur par nom
+GET {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs/inventaire/Dell XPS 15
+Accept: application/json
+
+### TP4 - Partie 5 : modification (écrite dans Logs/Ordinateurs/ordinateurs.log)
+PUT {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs/11
+Content-Type: application/json
+
+{
+  "nom": "Acer Aspire 5",
+  "etat": 0,
+  "stock": 5,
+  "prix": 500,
+  "caracteristiques": {
+    "ramGo": 16,
+    "stockageGo": 512,
+    "typeOrdi": 0,
+    "marque": "Acer",
+    "processeur": "AMD Ryzen 5"
+  }
+}
+
+### TP4 - Partie 5 : suppression (écrite dans Logs/Ordinateurs/ordinateurs.log)
+DELETE {{GestionOrdinateurs.API_HostAddress}}/api/ordinateurs/11

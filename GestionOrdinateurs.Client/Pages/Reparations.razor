@@ -1,0 +1,48 @@
+@page "/reparations"
+@using System.Net.Http.Headers
+@using Blazored.SessionStorage
+@using GestionOrdinateurs.Client.Models
+@using GestionOrdinateurs.Client.Services
+@inject IHttpClientFactory HttpClientFactory
+@inject ISessionStorageService SessionStorage
+
+<PageTitle>Réparations</PageTitle>
+
+<h1>Historique des réparations</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ordinateur</th>
+            <th>Technicien</th>
+            <th>Type de réparation</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reparation in reparations)
+        {
+            <tr>
+                <td>@reparation.NomOrdinateur</td>
+                <td>@reparation.Technicien</td>
+                <td>@reparation.TypeReparation</td>
+                <td>@reparation.DateIntervention</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<HistoriqueReparationModele> reparations = new();
+
+    //TP5 : récupère l'historique des réparations via la Gateway avec le token en session
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await SessionStorage.GetItemAsync<string>(CustomAuthStateProvider.CleToken);
+
+        var client = HttpClientFactory.CreateClient("Gateway");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        reparations = await client.GetFromJsonAsync<List<HistoriqueReparationModele>>("api/reparations/historique") ?? new();
+    }
+}

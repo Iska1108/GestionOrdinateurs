@@ -1,0 +1,86 @@
+@page "/login"
+@using GestionOrdinateurs.Client.Models
+@using GestionOrdinateurs.Client.Services
+@inject IHttpClientFactory HttpClientFactory
+@inject CustomAuthStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+
+<PageTitle>Connexion</PageTitle>
+
+<h1>Connexion</h1>
+
+@* TP5 : pas de mot de passe, seul le login est demandé *@
+<EditForm Model="modele" OnValidSubmit="SeConnecterAsync" FormName="login">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3" style="max-width: 320px">
+        <label for="login" class="form-label">Utilisateur</label>
+        <InputText id="login" class="form-control" @bind-Value="modele.Login" placeholder="user1" />
+        <ValidationMessage For="() => modele.Login" />
+    </div>
+
+    <button type="submit" class="btn btn-primary" disabled="@enCours">
+        @(enCours ? "Connexion..." : "Se connecter")
+    </button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(erreur))
+{
+    <div class="alert alert-danger mt-3" style="max-width: 320px">@erreur</div>
+}
+
+@code {
+    private readonly LoginModele modele = new();
+    private string? erreur;
+    private bool enCours;
+
+    // Données du formulaire
+    private class LoginModele
+    {
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Le login est obligatoire")]
+        public string Login { get; set; } = string.Empty;
+    }
+
+    // Demande un token à AuthentificationApi, le garde en session puis redirige vers l'accueil
+    private async Task SeConnecterAsync()
+    {
+        erreur = null;
+        enCours = true;
+
+        try
+        {
+            var client = HttpClientFactory.CreateClient("AuthentificationApi");
+            var response = await client.PostAsJsonAsync("api/authentication/login", new { login = modele.Login });
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                erreur = $"L'utilisateur \"{modele.Login}\" n'existe pas.";
+                return;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                erreur = $"Erreur lors de la connexion ({(int)response.StatusCode}).";
+                return;
+            }
+
+            var resultat = await response.Content.ReadFromJsonAsync<TokenResponse>();
+            if (resultat == null || string.IsNullOrEmpty(resultat.Token))
+            {
+                erreur = "Réponse invalide de l'API d'authentification.";
+                return;
+            }
+
+            // Token sauvegardé en session Blazor, puis retour à l'accueil
+            await AuthStateProvider.ConnecterAsync(resultat.Token);
+            Navigation.NavigateTo("/");
+        }
+        catch (HttpRequestException)
+        {
+            erreur = "L'API d'authentification est injoignable.";
+        }
+        finally
+        {
+            enCours = false;
+        }
+    }
+}

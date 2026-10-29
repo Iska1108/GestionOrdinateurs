@@ -1,0 +1,12 @@
+# Projet extérieur à la solution
+BiblioManagement/
+
+# Fichiers générés
+**/bin/
+**/obj/
+.vs/
+.vscode/
+
+# Fichiers sensibles
+.env
+**/appsettings.Development.json
