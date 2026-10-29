@@ -76,6 +76,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:5157
       SQLITE_DB_PATH: /app/data/parcinfo.db
+      Jwt__Key: ${JWT_KEY}
     depends_on:
       - postgres
     networks:
