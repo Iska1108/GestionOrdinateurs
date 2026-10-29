@@ -10,3 +10,7 @@ BiblioManagement/
 # Fichiers sensibles
 .env
 **/appsettings.Development.json
+
+# macOS
+.DS_Store
+**/.DS_Store
