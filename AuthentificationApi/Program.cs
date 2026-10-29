@@ -23,11 +23,24 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("BlazorClient", policy =>
+    {
+        policy.WithOrigins("http://localhost:5000")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
+// C'est surement la meme chose mais sur internet on me dit que c'est mieux de mettre les deux ensemble (pas plus d'explication)
+app.UseCors("BlazorClient");
 app.UseCors("AllowBlazorClient");
 
 app.MapControllers();

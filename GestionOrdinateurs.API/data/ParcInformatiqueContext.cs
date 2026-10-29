@@ -23,7 +23,10 @@ public class ParcInformatiqueContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlite("Data Source=parcinfo.db");
+            string dbPath = Environment.GetEnvironmentVariable("SQLITE_DB_PATH")
+                            ?? "parcinfo.db";
+
+            optionsBuilder.UseSqlite($"Data Source={dbPath}");
         }
     }
 

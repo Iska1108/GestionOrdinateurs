@@ -11,6 +11,9 @@ BiblioManagement/
 .env
 **/appsettings.Development.json
 
+# Sauvegardes des bases SQLite
+parcinfo-backup.db
+
 # macOS
 .DS_Store
 **/.DS_Store
